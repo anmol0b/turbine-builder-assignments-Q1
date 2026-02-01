@@ -1,0 +1,96 @@
+[2026-02-02--01-02-47 INFO actix_server::builder] starting 5 workers
+[2026-02-02--01-02-47 INFO actix_server::server] Tokio runtime found; starting in existing Tokio runtime
+[2026-02-02--01-02-47 INFO actix_server::server] starting service: "actix-web-service-127.0.0.1:18488", workers: 5, listening on: 127.0.0.1:18488
+[2026-02-02--01-02-48 INFO parity_ws] Listening for new connections on 127.0.0.1:8900.
+[2026-02-02--01-02-49 INFO txtx::svm::deploy_program] [Recovery Instructions] - An ephemeral authority account will be created and funded to write to the buffer account.
+[2026-02-02--01-02-49 INFO txtx::svm::deploy_program] [Recovery Instructions] - Please save the following information in case the deployment fails and the account needs to be recovered:
+[2026-02-02--01-02-49 INFO txtx::svm::deploy_program] [Recovery Instructions] - Ephemeral authority public key: 9ThMEha9DKxXCrEkrZ1BQu1PDNaFRo8nFnb4msRPL7jD
+[2026-02-02--01-02-49 INFO txtx::svm::deploy_program] [Recovery Instructions] - Ephemeral authority secret key: [152, 116, 185, 237, 129, 178, 144, 141, 132, 48, 65, 168, 180, 138, 110, 252, 15, 94, 148, 208, 252, 112, 65, 122, 139, 38, 206, 104, 45, 138, 226, 109, 125, 180, 56, 22, 129, 145, 84, 224, 109, 109, 63, 238, 246, 1, 37, 131, 121, 231, 177, 20, 162, 42, 15, 45, 160, 231, 243, 36, 126, 146, 97, 64]
+[2026-02-02--01-02-50 INFO txtx::svm::deploy_program] Account Created - Ephemeral authority account created and funded to write to buffer
+[2026-02-02--01-02-50 INFO txtx::svm::deploy_program] [Recovery Instructions] - Creating program buffer account at pubkey BvKYY786PaFrtMQgfrvFkc2R7QHMVWzxXxnW3FTMUWiP
+[2026-02-02--01-02-50 INFO txtx::svm::deploy_program] Account Created - Program buffer account created
+[2026-02-02--01-02-54 INFO txtx::svm::deploy_program] Buffer Ready - Writing to buffer account is complete
+[2026-02-02--01-02-55 INFO txtx::svm::deploy_program] Program Created - Program Bm4WJQ8MeaR2U5NTFNqQNnSqZqVTUe6Z8LccPEvTSRom has been deployed
+[2026-02-02--01-02-56 INFO txtx::svm::deploy_program] Complete - Ephemeral authority account closed and leftover funds returned to payer
+[2026-02-02--01-03-12 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:55677.
+[2026-02-01--19-33-21 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-24 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-27 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-31 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-32 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-33 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-34 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-35 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-36 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-37 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-38 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-39 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-40 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-41 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-42 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-43 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-44 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-45 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-46 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-47 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-48 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-49 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-50 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-51 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-52 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-53 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-54 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-55 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-56 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-57 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-33-58 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-02--01-04-03 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:55914.
+[2026-02-02--01-04-29 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:55968.
+[2026-02-02--01-05-23 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:55997.
+[2026-02-01--19-35-41 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-42 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-45 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-46 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-47 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-48 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-49 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-50 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-51 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-52 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-53 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-54 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-55 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-56 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-57 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-58 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-35-59 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-00 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-01 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-02 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-03 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-04 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-05 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-06 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-07 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-08 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-09 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-10 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-11 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-12 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-13 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-14 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-15 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-16 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-17 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-18 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-19 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-20 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-01--19-36-21 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-02--01-06-56 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:56373.
+[2026-02-02--01-07-01 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:56379.
+[2026-02-02--01-08-03 INFO actix_server::worker] shutting down idle worker
+[2026-02-02--01-08-03 INFO actix_server::worker] shutting down idle worker
+[2026-02-02--01-08-03 INFO actix_server::worker] shutting down idle worker
+[2026-02-02--01-08-03 INFO actix_server::worker] shutting down idle worker
+[2026-02-02--01-08-03 INFO actix_server::accept] accept thread stopped
+[2026-02-02--01-08-03 INFO actix_server::worker] shutting down idle worker
