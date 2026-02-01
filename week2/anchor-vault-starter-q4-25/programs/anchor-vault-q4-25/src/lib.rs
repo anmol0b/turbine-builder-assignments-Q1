@@ -3,7 +3,7 @@ use anchor_lang::{
     system_program::{transfer, Transfer},
 };
 
-declare_id!("2u5cG7PEVL5KdTRMWSjdwqtBVv1anE5Hvv4FGSPZVRUN");
+declare_id!("B5Rghh6AdNxEDmwxad95PCVh87fCkKPYpRVHxNUTpx7D");
 
 #[program]
 pub mod anchor_vault_q4_25 {
@@ -109,7 +109,7 @@ impl<'info> Deposit<'info> {
 pub struct Withdraw<'info> {
     // TODO: Implement Withdraw accounts
     #[account(mut)]
-    pub user:Signer<'info>
+    pub user:Signer<'info>,
     #[account(
         mut,
         seeds = [b"state", user.key().as_ref()],
@@ -117,18 +117,19 @@ pub struct Withdraw<'info> {
     )]
     pub vault_state:Account<'info,VaultState>,
     #[account(
-        seeds = [b"state", vault_state.key().as_ref()],
+        mut,
+        seeds = [b"vault", vault_state.key().as_ref()],
         bump = vault_state.vault_bump,
     )]
-    pub vault = SystemAccount<'info>,
-    pub system_progra: Program<'info,System>,
+    pub vault: SystemAccount<'info>,
+    pub system_program: Program<'info,System>,
 }
 
 impl<'info> Withdraw<'info> {
-    pub fn withdraw(&mut self, _amount: u64) -> Result<()> {
+    pub fn withdraw(&mut self, amount: u64) -> Result<()> {
         // TODO: Implement withdraw
         let vault_state_key = self.vault_state.key();
-        let signer_seeds = &[&[&[u8]]] = &[&[
+        let signer_seeds: &[&[&[u8]]] = &[&[
             b"vault",
             vault_state_key.as_ref(),
             &[self.vault_state.vault_bump],
@@ -141,7 +142,7 @@ impl<'info> Withdraw<'info> {
             },
             signer_seeds,
         );
-        transfer(cpi_ctx,amount)
+        transfer(cpi_ctx,amount)?;
         Ok(())
     }
 }
