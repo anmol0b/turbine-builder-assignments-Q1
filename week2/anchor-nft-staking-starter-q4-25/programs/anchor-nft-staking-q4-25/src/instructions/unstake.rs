@@ -42,6 +42,7 @@ pub struct Unstake<'info> {
     pub config: Account<'info, StakeConfig>,
     #[account(
         mut,
+        close = user,
         constraint = stake_account.owner == user.key(),
         seeds = [b"stake", config.key().as_ref(), asset.key().as_ref()],
         bump = stake_account.bump

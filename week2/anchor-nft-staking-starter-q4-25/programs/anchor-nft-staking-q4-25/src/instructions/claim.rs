@@ -5,6 +5,7 @@ use anchor_spl::{
 };
 
 use crate::state::{StakeConfig, UserAccount};
+use crate::errors::StakeError;
 
 #[derive(Accounts)]
 pub struct Claim<'info> {
@@ -25,6 +26,7 @@ pub struct Claim<'info> {
     )]
     pub config: Account<'info, StakeConfig>,
     #[account(
+        mut,
         seeds = [b"rewards", config.key().as_ref()],
         bump,
         mint::decimals = 6,
@@ -43,8 +45,10 @@ pub struct Claim<'info> {
 }
 
 impl<'info> Claim<'info> {
-    pub fn claim(&mut self) -> Result<()> {
+    pub fn claim(&mut self) -> Result<()>{
         //TODO
+        let points = self.user_account.points;
+        require!(points > 0, StakeError::NoRewardsToClaim);
         let signer_seeds: &[&[&[u8]]] = &[&[b"config", &[self.config.bump]]];
 
         let cpi_ctx = CpiContext::new_with_signer(
@@ -57,8 +61,10 @@ impl<'info> Claim<'info> {
             signer_seeds,
         );
 
+        mint_to(cpi_ctx, points as u64)?;
         self.user_account.points = 0;
-        mint_to(cpi_ctx, self.user_account.points as u64)
+
+        Ok(())
     }
 
 }

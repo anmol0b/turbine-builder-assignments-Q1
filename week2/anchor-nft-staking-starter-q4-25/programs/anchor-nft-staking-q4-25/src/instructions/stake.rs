@@ -57,7 +57,7 @@ pub struct Stake<'info> {
 impl<'info> Stake<'info> {
     pub fn stake(&mut self, bumps: &StakeBumps) -> Result<()> {
         require!(
-            self.config.max_stake >= self.user_account.amount_staked,
+            self.user_account.amount_staked < self.config.max_stake,
             StakeError::MaxStakeReached
         );
         AddPluginV1CpiBuilder::new(&self.core_program.to_account_info())
