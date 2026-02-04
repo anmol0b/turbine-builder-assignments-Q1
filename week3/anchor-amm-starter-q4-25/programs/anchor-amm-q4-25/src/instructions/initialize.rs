@@ -4,7 +4,7 @@ use anchor_spl::{
     token::{Mint, Token, TokenAccount},
 };
 
-use crate::state::Config;
+use crate::{errors::AmmError, state::Config};
 
 #[derive(Accounts)]
 #[instruction(seed: u64)]
@@ -57,6 +57,17 @@ impl<'info> Initialize<'info> {
         authority: Option<Pubkey>,
         bumps: InitializeBumps,
     ) -> Result<()> {
+        // Validate fee: must be <= 10,000 basis points (100%)
+        // Typical AMM fees are 0.01% (1 bp) to 1% (100 bp)
+        // We allow up to 10% (1,000 bp) as a reasonable maximum
+        require!(fee <= 10_000, AmmError::InvalidFee);
+
+        // Ensure mints are different
+        require!(
+            self.mint_x.key() != self.mint_y.key(),
+            AmmError::InvalidToken
+        );
+
         self.config.set_inner(Config {
             seed,
             authority,
