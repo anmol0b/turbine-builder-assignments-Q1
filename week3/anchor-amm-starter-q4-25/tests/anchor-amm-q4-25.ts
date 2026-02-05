@@ -1,173 +1,398 @@
 import * as anchor from "@coral-xyz/anchor";
-import { Program } from "@coral-xyz/anchor";
-import { AnchorAmm } from "../target/types/anchor_amm";
+import { BN, Program, web3 } from "@coral-xyz/anchor";
+import { AnchorAmmQ425 } from "../target/types/anchor_amm_q4_25";
+
 import {
-  createAssociatedTokenAccount,
+  ASSOCIATED_TOKEN_PROGRAM_ID,
   createMint,
   getAccount,
-  getAssociatedTokenAddressSync,
+  getAssociatedTokenAddress,
+  getMint,
+  getOrCreateAssociatedTokenAccount,
   mintTo,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import { PublicKey } from "@solana/web3.js";
-import { isSome } from "@metaplex-foundation/umi";
 
-describe("anchor-amm", () => {
-  // Configure the client to use the local cluster.
+import { SYSTEM_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/native/system";
+import { assert } from "chai";
+
+const { Keypair, PublicKey } = web3;
+
+describe("anchor-amm-q4-25", () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const payer = provider.wallet.payer;
   const connection = provider.connection;
+  const program = anchor.workspace.anchorAmmQ425 as Program<AnchorAmmQ425>;
 
-  // Declare Variables
-  // mints
-  let mint_x: PublicKey;
-  let mint_y: PublicKey;
-  let lp_mint: PublicKey;
-  // config
-  let seeds: anchor.BN;
-  let config_addr: PublicKey;
-  let config_bump: number;
-  // user ATA
-  let payer_x_ata: PublicKey;
-  let payer_y_ata: PublicKey;
-  let payer_lp_ata: PublicKey;
-  // vaults
-  let vault_x: PublicKey;
-  let vault_y: PublicKey;
+  const payer = provider.wallet.payer;
 
-  before("Tokens and PDA setup", async () => {
-    // derive the address for config
-    seeds = new anchor.BN(1111);
-    [config_addr, config_bump] = PublicKey.findProgramAddressSync(
-      [Buffer.from("config"), seeds.toArrayLike(Buffer, "le", 8)],
-      program.programId
+  const SEED = new BN(1);
+  const FEE = 500;
+  const DECIMALS = 6;
+
+  const authority = Keypair.generate();
+  const mintX = Keypair.generate();
+  const mintY = Keypair.generate();
+  const user = Keypair.generate();
+
+  let configPda: web3.PublicKey;
+  let lpMintPda: web3.PublicKey;
+  let configBump: number;
+  let lpBump: number;
+
+  let vaultX: web3.PublicKey;
+  let vaultY: web3.PublicKey;
+
+  let userX: web3.PublicKey;
+  let userY: web3.PublicKey;
+  let userLp: web3.PublicKey;
+
+  const base = (n: number) => new BN(n * 10 ** DECIMALS);
+  const bi = (n: BN) => BigInt(n.toString());
+
+  const expectFail = async (fn: () => Promise<any>, msg?: string) => {
+    let threw = false;
+    try {
+      await fn();
+    } catch (e) {
+      threw = true;
+    }
+    assert(threw, msg ?? "expected tx to fail");
+  };
+
+  before(async () => {
+    await provider.connection.requestAirdrop(payer.publicKey, 2_000_000_000);
+    await provider.connection.requestAirdrop(
+      authority.publicKey,
+      2_000_000_000,
     );
-    console.log("Config Address", config_addr);
+    await provider.connection.requestAirdrop(user.publicKey, 2_000_000_000);
 
-    // create Mint accounts: X, Y and Lp_mint
-    mint_x = await createMint(connection, payer, payer.publicKey, null, 6);
-    console.log("Mint X created: ", mint_x);
+    await new Promise((r) => setTimeout(r, 800));
 
-    mint_y = await createMint(connection, payer, payer.publicKey, null, 6);
-    console.log("Mint Y created: ", mint_y);
-
-    [lp_mint] = PublicKey.findProgramAddressSync(
-      [Buffer.from("lp"), config_addr.toBuffer()],
-      program.programId
+    [configPda, configBump] = PublicKey.findProgramAddressSync(
+      [Buffer.from("config"), new Uint8Array(SEED.toArray("le", 8))],
+      program.programId,
     );
-    console.log("lp_mint created: ", lp_mint);
 
-    // create and mint payers ATA for x, y mints
-    payer_x_ata = await createAssociatedTokenAccount(
+    [lpMintPda, lpBump] = PublicKey.findProgramAddressSync(
+      [Buffer.from("lp"), configPda.toBytes()],
+      program.programId,
+    );
+
+    await createMint(
       connection,
       payer,
-      mint_x,
-      payer.publicKey
+      authority.publicKey,
+      null,
+      DECIMALS,
+      mintX,
     );
-    console.log("Created payer ata for mint X ", payer_x_ata);
-    mintTo(connection, payer, mint_x, payer_x_ata, payer, 100000);
-    console.log("Minted 100000 mint_x to payer_x_ata");
 
-    payer_y_ata = await createAssociatedTokenAccount(
+    await createMint(
       connection,
       payer,
-      mint_y,
-      payer.publicKey
+      authority.publicKey,
+      null,
+      DECIMALS,
+      mintY,
     );
-    console.log("Created payer ata for mint Y ", payer_y_ata);
-    mintTo(connection, payer, mint_y, payer_y_ata, payer, 100000);
-    console.log("Minted 100000 mint_y to payer_y_ata");
 
-    payer_lp_ata = getAssociatedTokenAddressSync(lp_mint, payer.publicKey);
+    vaultX = await getAssociatedTokenAddress(mintX.publicKey, configPda, true);
+    vaultY = await getAssociatedTokenAddress(mintY.publicKey, configPda, true);
 
-    // create the vaults : X and Y
-    vault_x = getAssociatedTokenAddressSync(mint_x, config_addr, true);
-    console.log("Vault X: ", vault_x);
-    vault_y = getAssociatedTokenAddressSync(mint_y, config_addr, true);
-    console.log("Vault Y: ", vault_y);
+    userX = (
+      await getOrCreateAssociatedTokenAccount(
+        connection,
+        payer,
+        mintX.publicKey,
+        user.publicKey,
+      )
+    ).address;
+
+    userY = (
+      await getOrCreateAssociatedTokenAccount(
+        connection,
+        payer,
+        mintY.publicKey,
+        user.publicKey,
+      )
+    ).address;
+
+    userLp = await getAssociatedTokenAddress(lpMintPda, user.publicKey);
+
+    const mintAmount = BigInt(1000) * BigInt(10 ** DECIMALS);
+
+    await mintTo(connection, payer, mintX.publicKey, userX, authority, mintAmount);
+    await mintTo(connection, payer, mintY.publicKey, userY, authority, mintAmount);
   });
 
-  const program = anchor.workspace.anchorAmm as Program<AnchorAmm>;
-
-  it("Is initialized!", async () => {
-    // Add your test here.
-    const tx = await program.methods
-      .initialize(seeds, 300, payer.publicKey)
-      .accounts({
+  it("initialize works", async () => {
+    await program.methods
+      .initialize(SEED, FEE, authority.publicKey)
+      .accountsStrict({
         initializer: payer.publicKey,
-        mintX: mint_x,
-        mintY: mint_y,
-      })
-      .rpc();
-    console.log("Initialized config", tx);
-  });
-
-  it("Deposit to pool", async () => {
-    const tx = await program.methods
-      .deposit(new anchor.BN(6000), new anchor.BN(10000), new anchor.BN(50000))
-      .accounts({
-        user: payer.publicKey,
-        mintX: mint_x,
-        mintY: mint_y,
-        mintLp: lp_mint,
-        config: config_addr,
-        vaultX: vault_x,
-        vaultY: vault_y,
-      })
-      .rpc();
-    console.log("Deposit complete", tx);
-    let user_lp_mint_ata = await getAccount(connection, payer_lp_ata);
-    console.log("", user_lp_mint_ata.amount);
-    const get_vault_x = await getAccount(connection, vault_x);
-    const get_vault_y = await getAccount(connection, vault_y);
-    console.log(
-      `Vault X : ${get_vault_x.amount}, Vault Y: ${get_vault_y.amount}`
-    );
-  });
-
-  it("Swap", async () => {
-    const tx = await program.methods
-      .swap(true, new anchor.BN(1000), new anchor.BN(4422))
-      .accounts({
-        swapper: payer.publicKey,
-        mintX: mint_x,
-        mintY: mint_y,
-        config: config_addr,
-        vaultX: vault_x,
-        vaultY: vault_y,
+        mintX: mintX.publicKey,
+        mintY: mintY.publicKey,
+        mintLp: lpMintPda,
+        vaultX,
+        vaultY,
+        config: configPda,
         tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: SYSTEM_PROGRAM_ID,
       })
+      .signers([payer])
       .rpc();
 
-    console.log("Swap complete! ", tx);
-    const get_vault_x = await getAccount(connection, vault_x);
-    const get_vault_y = await getAccount(connection, vault_y);
-    console.log(
-      `Vault X : ${get_vault_x.amount}, Vault Y: ${get_vault_y.amount}`
-    );
+    const cfg = await program.account.config.fetch(configPda);
+
+    assert(cfg.seed.eq(SEED));
+    assert(cfg.fee === FEE);
+    assert(cfg.locked === false);
+
+    assert(cfg.mintX.equals(mintX.publicKey));
+    assert(cfg.mintY.equals(mintY.publicKey));
+    assert(cfg.authority.equals(authority.publicKey));
+
+    assert(cfg.configBump === configBump);
+    assert(cfg.lpBump === lpBump);
   });
 
-  it("Withdraw complete !", async () => {
-    const tx = await program.methods
-      .withdraw(new anchor.BN(5000), new anchor.BN(9166), new anchor.BN(37981))
-      .accounts({
-        withdrawer: payer.publicKey,
-        mintX: mint_x,
-        mintY: mint_y,
-        config: config_addr,
-        vaultX: vault_x,
-        vaultY: vault_y,
+  it("initialize should not run twice", async () => {
+    await expectFail(async () => {
+      await program.methods
+        .initialize(SEED, FEE, authority.publicKey)
+        .accountsStrict({
+          initializer: payer.publicKey,
+          mintX: mintX.publicKey,
+          mintY: mintY.publicKey,
+          mintLp: lpMintPda,
+          vaultX,
+          vaultY,
+          config: configPda,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          systemProgram: SYSTEM_PROGRAM_ID,
+        })
+        .signers([payer])
+        .rpc();
+    });
+  });
+
+  it("deposit mints LP and moves tokens", async () => {
+    const lpBefore = await getMint(connection, lpMintPda);
+
+    const amount = base(200);
+    const maxX = base(100);
+    const maxY = base(100);
+
+    await program.methods
+      .deposit(amount, maxX, maxY)
+      .accountsStrict({
+        user: user.publicKey,
+        mintX: mintX.publicKey,
+        mintY: mintY.publicKey,
+        config: configPda,
+        mintLp: lpMintPda,
+        vaultX,
+        vaultY,
+        userX,
+        userY,
+        userLp,
         tokenProgram: TOKEN_PROGRAM_ID,
+        systemProgram: SYSTEM_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
+      .signers([user])
       .rpc();
 
-    console.log("Withdraw Complete! ", tx);
-    const get_vault_x = await getAccount(connection, vault_x);
-    const get_vault_y = await getAccount(connection, vault_y);
-    console.log(
-      `Vault X : ${get_vault_x.amount}, Vault Y: ${get_vault_y.amount}`
-    );
+    const vaultXAcc = await getAccount(connection, vaultX);
+    const vaultYAcc = await getAccount(connection, vaultY);
+    const userLpAcc = await getAccount(connection, userLp);
+
+    const lpAfter = await getMint(connection, lpMintPda);
+
+    assert(vaultXAcc.amount === bi(maxX));
+    assert(vaultYAcc.amount === bi(maxY));
+    assert(userLpAcc.amount === bi(amount));
+
+    assert(lpAfter.supply > lpBefore.supply);
+  });
+
+  it("deposit fails if max is too small", async () => {
+    await expectFail(async () => {
+      await program.methods
+        .deposit(base(50), new BN(1), new BN(1))
+        .accountsStrict({
+          user: user.publicKey,
+          mintX: mintX.publicKey,
+          mintY: mintY.publicKey,
+          config: configPda,
+          mintLp: lpMintPda,
+          vaultX,
+          vaultY,
+          userX,
+          userY,
+          userLp,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          systemProgram: SYSTEM_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        })
+        .signers([user])
+        .rpc();
+    }, "deposit should fail with slippage");
+  });
+
+  it("withdraw burns LP and returns x/y", async () => {
+    const userXBefore = await getAccount(connection, userX);
+    const userYBefore = await getAccount(connection, userY);
+    const lpBefore = await getAccount(connection, userLp);
+
+    const vaultXBefore = await getAccount(connection, vaultX);
+    const vaultYBefore = await getAccount(connection, vaultY);
+
+    const amount = base(100);
+
+    await program.methods
+      .withdraw(amount, new BN(0), new BN(0))
+      .accountsStrict({
+        user: user.publicKey,
+        mintX: mintX.publicKey,
+        mintY: mintY.publicKey,
+        config: configPda,
+        mintLp: lpMintPda,
+        vaultX,
+        vaultY,
+        userX,
+        userY,
+        userLp,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      })
+      .signers([user])
+      .rpc();
+
+    const userXAfter = await getAccount(connection, userX);
+    const userYAfter = await getAccount(connection, userY);
+    const lpAfter = await getAccount(connection, userLp);
+
+    const vaultXAfter = await getAccount(connection, vaultX);
+    const vaultYAfter = await getAccount(connection, vaultY);
+
+    assert(lpAfter.amount === lpBefore.amount - bi(amount));
+
+    assert(userXAfter.amount > userXBefore.amount);
+    assert(userYAfter.amount > userYBefore.amount);
+
+    assert(vaultXAfter.amount < vaultXBefore.amount);
+    assert(vaultYAfter.amount < vaultYBefore.amount);
+  });
+
+  it("withdraw fails if amount > lp balance", async () => {
+    const lpAcc = await getAccount(connection, userLp);
+    const tooMuch = new BN((lpAcc.amount + BigInt(1)).toString());
+
+    await expectFail(async () => {
+      await program.methods
+        .withdraw(tooMuch, new BN(0), new BN(0))
+        .accountsStrict({
+          user: user.publicKey,
+          mintX: mintX.publicKey,
+          mintY: mintY.publicKey,
+          config: configPda,
+          mintLp: lpMintPda,
+          vaultX,
+          vaultY,
+          userX,
+          userY,
+          userLp,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        })
+        .signers([user])
+        .rpc();
+    });
+  });
+
+  it("swap x -> y works", async () => {
+    const xBefore = await getAccount(connection, userX);
+    const yBefore = await getAccount(connection, userY);
+
+    await program.methods
+      .swap(true, base(10), new BN(0))
+      .accountsStrict({
+        user: user.publicKey,
+        mintX: mintX.publicKey,
+        mintY: mintY.publicKey,
+        config: configPda,
+        mintLp: lpMintPda,
+        vaultX,
+        vaultY,
+        userX,
+        userY,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      })
+      .signers([user])
+      .rpc();
+
+    const xAfter = await getAccount(connection, userX);
+    const yAfter = await getAccount(connection, userY);
+
+    assert(xAfter.amount < xBefore.amount);
+    assert(yAfter.amount > yBefore.amount);
+  });
+
+  it("swap y -> x works", async () => {
+    const xBefore = await getAccount(connection, userX);
+    const yBefore = await getAccount(connection, userY);
+
+    await program.methods
+      .swap(false, base(10), new BN(0))
+      .accountsStrict({
+        user: user.publicKey,
+        mintX: mintX.publicKey,
+        mintY: mintY.publicKey,
+        config: configPda,
+        mintLp: lpMintPda,
+        vaultX,
+        vaultY,
+        userX,
+        userY,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      })
+      .signers([user])
+      .rpc();
+
+    const xAfter = await getAccount(connection, userX);
+    const yAfter = await getAccount(connection, userY);
+
+    assert(yAfter.amount < yBefore.amount);
+    assert(xAfter.amount > xBefore.amount);
+  });
+
+  it("swap fails if minOut is insane", async () => {
+    await expectFail(async () => {
+      await program.methods
+        .swap(true, base(1), base(999999))
+        .accountsStrict({
+          user: user.publicKey,
+          mintX: mintX.publicKey,
+          mintY: mintY.publicKey,
+          config: configPda,
+          mintLp: lpMintPda,
+          vaultX,
+          vaultY,
+          userX,
+          userY,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        })
+        .signers([user])
+        .rpc();
+    });
   });
 });

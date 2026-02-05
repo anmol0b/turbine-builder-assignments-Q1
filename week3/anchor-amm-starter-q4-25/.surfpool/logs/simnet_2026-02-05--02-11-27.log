@@ -49,3 +49,9 @@
 [2026-02-04--20-44-31 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
 [2026-02-04--20-44-32 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
 [2026-02-05--02-15-07 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:63021.
+[2026-02-06--01-35-17 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--01-35-17 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--01-35-17 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--01-35-17 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--01-35-17 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--01-35-17 INFO actix_server::accept] accept thread stopped

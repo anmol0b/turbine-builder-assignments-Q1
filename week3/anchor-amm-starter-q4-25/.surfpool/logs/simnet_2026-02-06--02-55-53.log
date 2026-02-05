@@ -1,0 +1,54 @@
+[2026-02-06--02-55-53 INFO actix_server::builder] starting 5 workers
+[2026-02-06--02-55-53 INFO actix_server::server] Tokio runtime found; starting in existing Tokio runtime
+[2026-02-06--02-55-53 INFO actix_server::server] starting service: "actix-web-service-127.0.0.1:18488", workers: 5, listening on: 127.0.0.1:18488
+[2026-02-06--02-55-53 INFO parity_ws] Listening for new connections on 127.0.0.1:8900.
+[2026-02-06--02-59-13 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:65289.
+[2026-02-06--02-59-21 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--02-59-22 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-33 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-34 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-35 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-36 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-37 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-38 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-39 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-40 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-41 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-42 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--02-59-43 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-44 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-45 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--02-59-46 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-47 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-48 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-49 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-50 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--02-59-51 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-52 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-53 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--02-59-54 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-55 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--02-59-56 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-57 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--02-59-58 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-29-59 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-00 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-01 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-02 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-03 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-04 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-05 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--03-00-06 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-07 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-08 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-09 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-10 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-05--21-30-11 ERROR hyper::server::tcp] accept error: Too many open files (os error 24)
+[2026-02-06--03-00-45 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:49321.
+[2026-02-06--03-00-48 INFO parity_ws::io] Accepted a new tcp connection from 127.0.0.1:49324.
+[2026-02-06--03-02-16 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--03-02-16 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--03-02-16 INFO actix_server::accept] accept thread stopped
+[2026-02-06--03-02-16 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--03-02-16 INFO actix_server::worker] shutting down idle worker
+[2026-02-06--03-02-16 INFO actix_server::worker] shutting down idle worker
