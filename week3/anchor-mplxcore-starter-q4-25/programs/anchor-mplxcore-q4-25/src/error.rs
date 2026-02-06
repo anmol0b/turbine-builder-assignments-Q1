@@ -16,4 +16,22 @@ pub enum MPLXCoreError {
     CollectionNotInitialized,
     #[msg("The collection is invalid.")]
     InvalidCollection,
+    #[msg("Invalid asset account.")]
+    InvalidAsset,
+    #[msg("Asset not initialized.")]
+    AssetNotInitialized,
+    #[msg("Collection mismatch.")]
+    CollectionMismatch,
+    #[msg("Freeze failed.")]
+    FreezeFailed,
+    #[msg("Thaw failed.")]
+    ThawFailed,
+    #[msg("Invalid name.")]
+    InvalidName,
+    #[msg("Name too long.")]
+    NameTooLong,
+    #[msg("Update failed.")]
+    UpdateFailed,
+    #[msg("Mint failed.")]
+    MintFailed,
 }
