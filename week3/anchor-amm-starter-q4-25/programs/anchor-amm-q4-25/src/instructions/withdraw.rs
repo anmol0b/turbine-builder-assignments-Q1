@@ -44,7 +44,8 @@ pub struct Withdraw<'info> {
         )]
         pub vault_y: Box<Account<'info, TokenAccount>>,
         #[account(
-            mut,
+            init_if_needed,
+            payer = user,
             associated_token::mint = mint_x,
             associated_token::authority = user,
             associated_token::token_program = token_program
@@ -52,7 +53,8 @@ pub struct Withdraw<'info> {
         )]
         pub user_x: Box<Account<'info, TokenAccount>>,
         #[account(
-            mut,
+            init_if_needed,
+            payer = user,
             associated_token::mint = mint_y,
             associated_token::authority = user,
             associated_token::token_program = token_program
@@ -68,6 +70,8 @@ pub struct Withdraw<'info> {
         pub user_lp: Box<Account<'info, TokenAccount>>,
         pub token_program: Program<'info, Token>,
         pub associated_token_program: Program<'info, AssociatedToken>,
+        pub system_program: Program<'info, System>,
+
 }
 
 impl<'info> Withdraw<'info> {

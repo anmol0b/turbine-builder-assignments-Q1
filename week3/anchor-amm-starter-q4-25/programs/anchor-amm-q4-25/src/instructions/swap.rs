@@ -42,7 +42,8 @@ pub struct Swap<'info> {
         )]
         pub vault_y: Box<Account<'info, TokenAccount>>,
         #[account(
-            mut,
+            init_if_needed,
+            payer = user,
             associated_token::mint = mint_x,
             associated_token::authority = user,
             associated_token::token_program = token_program
@@ -50,7 +51,8 @@ pub struct Swap<'info> {
         )]
         pub user_x: Box<Account<'info, TokenAccount>>,
         #[account(
-            mut,
+            init_if_needed,
+            payer = user,
             associated_token::mint = mint_y,
             associated_token::authority = user,
             associated_token::token_program = token_program
@@ -59,6 +61,8 @@ pub struct Swap<'info> {
         pub user_y: Box<Account<'info, TokenAccount>>,
         pub token_program: Program<'info, Token>,
         pub associated_token_program: Program<'info, AssociatedToken>,
+        pub system_program: Program<'info, System>,
+
 }
 impl<'info> Swap<'info> {
     pub fn swap(&mut self, is_x: bool, amount_in: u64, min_amount_out: u64) -> Result<()> {
@@ -100,6 +104,9 @@ impl<'info> Swap<'info> {
                 .swap(LiquidityPair::Y, amount_in, min_amount_out)
                 .map_err(Into::<AmmError>::into)?
         };
+
+        require!(swap_result.deposit != 0, AmmError::InvalidAmount);
+        require!(swap_result.withdraw != 0, AmmError::InvalidAmount);
 
         // Deposit input tokens (user -> vault)
         self.deposit_tokens(is_x, swap_result.deposit)?;

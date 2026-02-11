@@ -270,6 +270,7 @@ describe("anchor-amm-q4-25", () => {
         userLp,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: SYSTEM_PROGRAM_ID,
       })
       .signers([user])
       .rpc();
@@ -310,6 +311,7 @@ describe("anchor-amm-q4-25", () => {
           userLp,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          systemProgram: SYSTEM_PROGRAM_ID,
         })
         .signers([user])
         .rpc();
@@ -334,6 +336,7 @@ describe("anchor-amm-q4-25", () => {
         userY,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: SYSTEM_PROGRAM_ID,
       })
       .signers([user])
       .rpc();
@@ -363,6 +366,7 @@ describe("anchor-amm-q4-25", () => {
         userY,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: SYSTEM_PROGRAM_ID,
       })
       .signers([user])
       .rpc();
@@ -390,6 +394,7 @@ describe("anchor-amm-q4-25", () => {
           userY,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          systemProgram: SYSTEM_PROGRAM_ID,
         })
         .signers([user])
         .rpc();

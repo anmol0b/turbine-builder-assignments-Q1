@@ -1,0 +1,16 @@
+[2026-02-11--14-56-11 INFO actix_server::builder] starting 5 workers
+[2026-02-11--14-56-11 INFO actix_server::server] Tokio runtime found; starting in existing Tokio runtime
+[2026-02-11--14-56-11 INFO actix_server::server] starting service: "actix-web-service-127.0.0.1:18488", workers: 5, listening on: 127.0.0.1:18488
+[2026-02-11--14-56-11 INFO parity_ws] Listening for new connections on 127.0.0.1:8900.
+[2026-02-11--14-56-12 INFO txtx::svm::deploy_program] [Recovery Instructions] - An ephemeral authority account will be created and funded to write to the buffer account.
+[2026-02-11--14-56-12 INFO txtx::svm::deploy_program] [Recovery Instructions] - Please save the following information in case the deployment fails and the account needs to be recovered:
+[2026-02-11--14-56-12 INFO txtx::svm::deploy_program] [Recovery Instructions] - Ephemeral authority public key: 7TSZbAfxYeYGahqZEgPtnRq7ZK33RKVBv6DqVtiZRN4H
+[2026-02-11--14-56-12 INFO txtx::svm::deploy_program] [Recovery Instructions] - Ephemeral authority secret key: [58, 223, 212, 181, 172, 96, 119, 193, 164, 220, 105, 205, 237, 120, 26, 118, 128, 18, 70, 94, 9, 79, 33, 159, 71, 227, 26, 173, 34, 32, 169, 225, 95, 236, 32, 33, 20, 47, 73, 9, 248, 11, 244, 20, 59, 158, 232, 189, 206, 200, 65, 159, 49, 135, 1, 198, 194, 35, 170, 100, 254, 130, 9, 210]
+[2026-02-11--14-56-13 INFO txtx::svm::deploy_program] Account Created - Ephemeral authority account created and funded to write to buffer
+[2026-02-11--14-56-13 INFO txtx::svm::deploy_program] [Recovery Instructions] - Creating program buffer account at pubkey AM35PcjYXRupeWtx4baYj381Yvtcg5BFo6dk78TMcBEA
+[2026-02-11--14-56-13 INFO actix_server::worker] shutting down idle worker
+[2026-02-11--14-56-13 INFO actix_server::worker] shutting down idle worker
+[2026-02-11--14-56-13 INFO actix_server::accept] accept thread stopped
+[2026-02-11--14-56-13 INFO actix_server::worker] shutting down idle worker
+[2026-02-11--14-56-13 INFO actix_server::worker] shutting down idle worker
+[2026-02-11--14-56-13 INFO actix_server::worker] shutting down idle worker
