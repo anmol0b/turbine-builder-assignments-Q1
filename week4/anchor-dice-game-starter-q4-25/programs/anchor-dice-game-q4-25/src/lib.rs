@@ -7,22 +7,8 @@ use anchor_lang::prelude::*;
 pub use instructions::*;
 pub use state::*;
 
-declare_id!("DZDRzKdTu4SweFFjDutMgPqu55Qt9TLbhWG1cMAikYVp");
+declare_id!("2gXZxDC7KjJkvra9acF1coZSf6yTnyNcetoqjpPxpSb8");
 
-#[program]
-pub mod anchor_dice_game_q4_25 {
-    use super::*;
-    use anchor_lang::prelude::*;
-
-    mod state;
-    mod instructions;
-    mod error;
-    
-    use instructions::*;
-    use error::*;
-    
-    declare_id!("J86V1Echaw6CB1aMbGVbmgCb37RUBcev9QmruuR91mma");
-    
     #[program]
     pub mod anchor_dice_2024 {
         use super::*;
@@ -32,7 +18,7 @@ pub mod anchor_dice_game_q4_25 {
         }
     
         pub fn place_bet(ctx: Context<PlaceBet>, seed: u128, roll: u8, amount: u64) -> Result<()> {
-            ctx.accounts.create_bet(seed, roll, amount, &ctx.bumps)?;
+            ctx.accounts.create_bet(&ctx.bumps, seed, roll, amount)?;
             ctx.accounts.deposit(amount)
         }
     

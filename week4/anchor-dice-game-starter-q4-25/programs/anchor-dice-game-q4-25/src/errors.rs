@@ -2,6 +2,20 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum DiceError {
+    #[msg("Invalid ed25519 signature length")]
+    InvalidSignatureLength,
+    #[msg("Missing ed25519 instruction")]
+    MissingEd25519Instruction,
+    #[msg("Invalid bet amount")]
+    InvalidBetAmount,
+    #[msg("Invalid roll")]
+    InvalidRoll,
+    #[msg("Invalid player")]
+    InvalidPlayer,
+    #[msg("Invalid house fee")]
+    InvalidHouseFee,
+    #[msg("Vault has insufficient funds")]
+    VaultInsufficientFunds,
     #[msg("Bump error")]
     BumpError,
     #[msg("Overflow")]
